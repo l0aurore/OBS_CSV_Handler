@@ -1,5 +1,5 @@
 
 *.log
 logger.log
-_pycache_/
+_pycache_\
 *.pyc
