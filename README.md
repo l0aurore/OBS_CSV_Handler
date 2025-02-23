@@ -12,7 +12,7 @@ OBS CSV Handler is intended
 OBS CSV Handler can use any CSV file but requires name markers for generating specific inputs for OBS. 
 
     picture         creates an image vs 3 input from file pathway
-    color           creates a color source at 100% opacity (put in hex)
+    color           creates a color source at 100% opacity (put in hex, sscript will account # in sheets)
     browser         creats a browser source from the url
     media           creates a media file from file pathway
 
@@ -26,7 +26,24 @@ How to use: (Gui.py is main file)
     Configure CSV Mapping: Adjust CSV input naming protocols, Rerun this when adding additional values from CSV
     Refresh: Update changes of existing fields of CSV inside of OBS CVS Updater (not OBS yet)
     Save Changes: Creates/updates sources inside of OBS
-    Connect to OBS: If OBS CSV disconnects from OBS websocket, click connect to OBS to attempt a reconnection. The program will attempt 3 times. 
+    Connect to OBS: If OBS CSV disconnects from OBS websocket, click connect to OBS to attempt a reconnection. The program will attempt 3 times.
+
+    Double clicking values will allow you to edit. 
+
+    Known/untested bugs:
+    1) Script overwrites CSV. Not an issue when used with sheets_program_5 but if you are using excel to locally update a CSV, be aware. 
+    2) What happens above x number of inputs. 
+    3) Sometimes the program will not update sources in OBS and it requires all sources to be deleted to be updated. I cannot replicate, and websocket connection is confirmed. 
+    4) Browser sources default as transparent
+    5) Program starts with error messaging saying it cannot read the CSV. Once user browses to CSV, it is read correctly. 
+    
+    Planned implentations:
+    1) GUI displays short hex and not decimal hex
+    2) GUI displays short pathways
+    3) Move "Save Changes" to below "Refresh" and add short cuts for refresh and save. 
+    4) Add Scene and Keybind creation
+    5) Implement embedded API collection
+    6) Global modifiers (transparency, rotation, etc) to source to affect across all scenes
     
 
  
