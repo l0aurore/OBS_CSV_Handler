@@ -1,3 +1,5 @@
 
 *.log
-obs_csv_updater.log
+logger.log
+_pycache_/
+*.pyc
