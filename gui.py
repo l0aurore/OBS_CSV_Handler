@@ -108,7 +108,7 @@ class ConfigureMappingDialog(tk.Toplevel):
 
             # Pack the canvas and scrollbar
             canvas.pack(side="left", fill="both", expand=True)
-            scrollbar.pack(side="right", fill="y")
+            scrollbar.pack(side="right", fill="both")
 
     def add_mapping_row(self, parent, column_name):
         """Add a new mapping row to the interface."""
@@ -205,7 +205,7 @@ class OBSUpdaterGUI:
 
         # Initialize current CSV path
         self.current_csv_path = DEFAULT_CSV_PATH
-        self.ensure_csv_exists()
+        #self.ensure_csv_exists()
 
         # Initialize handlers
         self.csv_handler = CSVHandler(self.current_csv_path)
@@ -230,23 +230,7 @@ class OBSUpdaterGUI:
         self.create_buttons()
 
         # Initial load
-        self.load_sources()
         self.connect_to_obs()
-
-    def ensure_csv_exists(self):
-        """Ensure the default CSV file exists with proper headers."""
-        if not os.path.exists(self.current_csv_path):
-            try:
-                with open(self.current_csv_path, 'w', newline='') as f:
-                    writer = csv.writer(f)
-                    writer.writerow(['source_name', 'value'])
-                    # Add some default sources
-                    writer.writerow(['title_text', 'Welcome to Stream'])
-                    writer.writerow(['subtitle_text', 'Live Now!'])
-                logger.info(f"Created new CSV file at {self.current_csv_path}")
-            except Exception as e:
-                logger.error(f"Failed to create default CSV file: {str(e)}")
-                messagebox.showerror("Error", f"Failed to create default CSV file: {str(e)}")
 
     def create_file_selection_frame(self):
         """Create the file selection frame with path display and browse button."""

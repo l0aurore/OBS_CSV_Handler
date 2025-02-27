@@ -9,7 +9,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 TESTING_MODE = False  # Set to False when using with real OBS
 
 # OBS WebSocket connection settings
-OBS_HOST = "127.0.0.1"  # Use 127.0.0.1 instead of localhost for better compatibility
+OBS_HOST = "10.0.0.41"  # 
 OBS_PORT = 4455
 # Set to None or empty string for non-authenticated connections
 OBS_PASSWORD = None
@@ -19,7 +19,7 @@ MAX_RETRIES = 3
 RETRY_DELAY = 5  # seconds
 
 # CSV settings
-DEFAULT_CSV_PATH = os.path.join(BASE_DIR, "sources.csv")
+DEFAULT_CSV_PATH = os.path.join(BASE_DIR, "data.csv")
 CSV_ENCODING = "utf-8"
 
 # Update settings
