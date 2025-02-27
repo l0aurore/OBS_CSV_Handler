@@ -1,4 +1,5 @@
 """Configuration settings for the OBS CSV Updater plugin."""
+from background_scripts import config, csv_handler, obs_controller, logger, BASE_DIR
 
 import os
 

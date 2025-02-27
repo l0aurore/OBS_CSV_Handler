@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
 import csv
 import os
+from background_scripts import config, csv_handler, obs_controller, logger
 from config import DEFAULT_CSV_PATH, OBS_HOST, OBS_PORT, BASE_DIR
 from csv_handler import CSVHandler
 from obs_controller import OBSController
