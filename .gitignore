@@ -3,3 +3,4 @@
 logger.log
 _pycache_\
 *.pyc
+*.ini

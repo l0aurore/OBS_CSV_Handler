@@ -1,8 +1,8 @@
 import time
 import obsws_python as obs
-from logger import logger
-from config import MAX_RETRIES, RETRY_DELAY
-from hex_converter import validate_hex_color  # Import the hex converter function
+from background_scripts.logger import logger
+from background_scripts.config import MAX_RETRIES, RETRY_DELAY
+from background_scripts.hex_converter import validate_hex_color  # Import the hex converter function
 
 class OBSController:
     def __init__(self, host, port, password=None):

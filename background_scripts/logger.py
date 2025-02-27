@@ -2,7 +2,7 @@
 
 import logging
 from logging.handlers import RotatingFileHandler
-from config import LOG_FILE, LOG_LEVEL
+from background_scripts.config import LOG_FILE, LOG_LEVEL
 
 def setup_logger():
     """Configure and return the logger instance."""

@@ -1,4 +1,4 @@
-import padding_hex  # Ensure padding_hex.py contains format_hex
+from background_scripts.padding_hex import format_hex # Ensure padding_hex.py contains format_hex
 
 def validate_hex_color(hex_value):
     """

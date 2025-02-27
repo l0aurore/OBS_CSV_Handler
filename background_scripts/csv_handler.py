@@ -3,9 +3,9 @@
 import pandas as pd
 import os
 from typing import Dict, Optional, Union
-from logger import logger
-from config import CSV_ENCODING
-from hex_converter import validate_hex_color  # Importing standalone hex validator
+from background_scripts.logger import logger
+from background_scripts.config import CSV_ENCODING
+from background_scripts.hex_converter import validate_hex_color  # Importing standalone hex validator
 
 class CSVHandler:
     def __init__(self, csv_path):
