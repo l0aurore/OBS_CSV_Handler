@@ -31,11 +31,11 @@ How to use: (Gui.py is main file, open in compiler or CMD Prompt/Terminal)
 - Double clicking values will allow you to edit. 
 
 Known/untested bugs:
-1) ~~Script overwrites CSV. Not an issue when used with sheets_program_5 but if you are using excel to locally update a CSV, be aware. ~~
+1) ~~ Script overwrites CSV. Not an issue when used with sheets_program_5 but if you are using excel to locally update a CSV, be aware. ~~
 2) What happens to GUI above x number of inputs. 
 3) Sometimes the program will not update sources in OBS and it requires all sources to be deleted to be updated. I cannot replicate, and websocket connection is confirmed. 
 4) Browser sources default as transparent
-5) ~~Program starts with error messaging saying it cannot read the CSV. Once user browses to CSV file, it is read correctly. ~~
+5) ~~ Program starts with error messaging saying it cannot read the CSV. Once user browses to CSV file, it is read correctly. ~~
     
 Planned implentations:
 1) GUI displays short hex and not decimal hex
@@ -66,13 +66,13 @@ Dependencies you may need to install (Win and OS) (beginner friendly):
 
 Now you have the fundation to install all of the modules, you need to run the specific prompts:
 
-Windows
+    Windows
     - pip install pandas
     - pip install requests
     - pip install TK
     - pip install obsws_python
 
-Mac
+    Mac
     - Sometimes pip does not work for specific modules, that's where you will need to use homebrew to install them.
     - Example: 
         $ brew install python-tk Or pip install tk
