@@ -210,6 +210,7 @@ class OBSUpdaterGUI:
         # Initialize handlers
         self.csv_handler = CSVHandler(self.current_csv_path)
         self.obs_controller = OBSController(OBS_HOST, OBS_PORT)
+        self.column_mapping = self.csv_handler.column_mapping
 
         # Create main frame
         self.main_frame = ttk.Frame(self.root, padding="10")
@@ -339,33 +340,78 @@ class OBSUpdaterGUI:
             logger.info("Sources loaded successfully")
         else:
             messagebox.showerror("Error", f"Failed to load sources from {self.current_csv_path}")
-
+    
     def edit_item(self, event):
-        """Handle double-click to edit item."""
-        item = self.tree.selection()[0]
+        """Handle double-click to edit item in Treeview and update CSV."""
+        item = self.tree.selection()[0]  # Get selected row
         column = self.tree.identify_column(event.x)
 
-        # Only allow editing the value column
-        if column == "#2":  # Value column
+        if column in ("#1", "#2"):  # Allow editing Source Name (col #1) or Value (col #2)
+            col_index = 0 if column == "#1" else 1  # 0 = source_name, 1 = value
             x, y, w, h = self.tree.bbox(item, column)
 
-            # Create entry widget for editing
-            value = self.tree.item(item)['values'][1]
+            # Get current value and create an Entry widget
+            current_value = self.tree.item(item)['values'][col_index]
             entry = ttk.Entry(self.tree)
             entry.place(x=x, y=y, width=w, height=h)
-            entry.insert(0, value)
+            entry.insert(0, current_value)
             entry.select_range(0, tk.END)
             entry.focus()
 
             def save_edit(event):
-                new_value = entry.get()
-                source_name = self.tree.item(item)['values'][0]
-                self.tree.set(item, column=1, value=new_value)
-                entry.destroy()
-                logger.info(f"Updated source '{source_name}' to '{new_value}'")
+                """Save edited value and update CSV."""
+                new_value = entry.get().strip()  # Strip whitespace
+                row_values = self.tree.item(item)['values'][:]  # Copy row data
+                old_source_name = row_values[0]  # Store old source name before updating
 
-            entry.bind('<Return>', save_edit)
-            entry.bind('<FocusOut>', lambda e: entry.destroy())
+                # Update the Treeview UI
+                row_values[col_index] = new_value
+                self.tree.item(item, values=row_values)
+                entry.destroy()
+
+                logger.info(f"Updating CSV: Old Row - {row_values}")
+
+                # Find the corresponding column in the CSV using column_mapping
+                column_name = self.csv_handler.column_mapping.get(old_source_name)
+
+                if column_name:
+                    try:
+                        # Read CSV into a list
+                        updated_data = []
+                        with open(self.current_csv_path, 'r', newline='', encoding='utf-8') as f:
+                            reader = csv.reader(f)
+                            header = next(reader)  # Read header row
+                            updated_data.append(header)  # Preserve header
+
+                            # Read the row (since only one row in your CSV)
+                            row = next(reader)
+                            logger.info(f"Original row from CSV: {row}")
+
+                            # Update the specific column in the CSV
+                            if column_name in header:
+                                column_index = header.index(column_name)
+                                row[column_index] = new_value
+                                logger.info(f"Updated column {column_name} with new value: {new_value}")
+                            else:
+                                logger.warning(f"Column '{column_name}' not found in CSV header!")
+
+                            updated_data.append(row)
+
+                        # Write the updated data back to the CSV
+                        with open(self.current_csv_path, 'w', newline='', encoding='utf-8') as f:
+                            writer = csv.writer(f)
+                            writer.writerows(updated_data)  # Write all updated rows
+
+                        logger.info(f"CSV successfully updated: {self.current_csv_path}")
+
+                    except Exception as e:
+                        logger.error(f"Error updating CSV: {str(e)}")
+                else:
+                    logger.warning(f"Source name '{old_source_name}' not found in column_mapping!")
+
+            entry.bind('<Return>', save_edit)  # Save on Enter key
+            entry.bind('<FocusOut>', lambda e: entry.destroy())  # Destroy on focus out
+
 
     def save_changes(self):
         """Save changes to CSV and update OBS."""
@@ -375,13 +421,6 @@ class OBSUpdaterGUI:
             for item in self.tree.get_children():
                 source_name, value = self.tree.item(item)['values']
                 sources[source_name] = value
-
-            # Write to CSV
-            with open(self.current_csv_path, 'w', newline='', encoding='utf-8') as f:
-                writer = csv.writer(f)
-                writer.writerow(['source_name', 'value'])
-                for source_name, value in sources.items():
-                    writer.writerow([source_name, value])
 
             # Update OBS
             if self.obs_controller.bulk_update_sources(sources):

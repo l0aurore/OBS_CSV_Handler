@@ -113,6 +113,7 @@ class CSVHandler:
             logger.error(f"Error reading CSV file: {str(e)}")
             return None
 
+
     def has_changes(self) -> bool:
         """Check if the CSV file has changed since last read."""
         current_data = self.read_csv(update_last=False)
