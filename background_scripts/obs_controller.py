@@ -73,32 +73,30 @@ class OBSController:
             return False
 
     def create_text_source(self, source_name, initial_text=""):
-        """Create a new text source in OBS."""
+        """Create a new text source in OBS, ensuring 'Sources' scene exists."""
         if not self.client:
             logger.error("Not connected to OBS")
             return False
 
         try:
-            # First ensure we have a scene
+            # Get the list of scenes
             scenes_response = self.client.get_scene_list()
-            scene_name = None
+            scene_name = "Sources"
 
-            # Check if we have any scenes
-            if hasattr(scenes_response, 'scenes') and scenes_response.scenes:
-                # Get the first scene from the list
-                scene_name = scenes_response.scenes[0]['sceneName']
-            else:
-                # Create a new scene if none exists
-                scene_name = "Scene"
+            # Check if "Sources" scene exists
+            scene_exists = any(scene['sceneName'] == scene_name for scene in scenes_response.scenes)
+
+            # Create the "Sources" scene if it does not exist
+            if not scene_exists:
                 try:
                     self.client.create_scene(scene_name)
                     logger.info(f"Created new scene: {scene_name}")
                 except Exception as e:
-                    logger.error(f"Failed to create scene: {str(e)}")
+                    logger.error(f"Failed to create scene '{scene_name}': {str(e)}")
                     return False
 
             # Determine input kind based on source name
-            input_kind = "text_ft2_source_v2"  # default
+            input_kind = "text_ft2_source_v2"  # Default to text source
             input_settings = {"text": str(initial_text)}
 
             if "picture" in source_name.lower():
@@ -106,11 +104,10 @@ class OBSController:
                 input_settings = {"file": str(initial_text)}
             elif "color" in source_name.lower():
                 input_kind = "color_source_v3"
-                # Use validate_hex_color for color validation
                 color = validate_hex_color(str(initial_text))
                 if not color:
                     logger.error(f"Invalid color format for source '{source_name}' with value '{initial_text}'")
-                    return False  # Return false if the color is invalid
+                    return False
                 input_settings = {"color": color}
             elif "browser" in source_name.lower():
                 input_kind = "browser_source"
@@ -119,6 +116,7 @@ class OBSController:
                 input_kind = "ffmpeg_source"
                 input_settings = {"local_file": str(initial_text)}
 
+            # Create the source in the "Sources" scene
             self.client.create_input(
                 sceneName=scene_name,
                 inputName=source_name,
@@ -126,14 +124,14 @@ class OBSController:
                 inputSettings=input_settings,
                 sceneItemEnabled=True
             )
-            logger.info(f"Created new text source: {source_name}")
+
+            logger.info(f"Created new source '{source_name}' in scene '{scene_name}'")
             return True
 
         except Exception as e:
             logger.error(f"Failed to create text source '{source_name}': {str(e)}")
             return False
-
-
+    
     def update_source(self, source_name, value):
         """Update an OBS text source with new value. Create if doesn't exist."""
         if not self.client:

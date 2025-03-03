@@ -42,7 +42,7 @@ def validate_hex_color(hex_value):
         hex_value = hex_value.upper()
 
         # Ensure the hex value is exactly 6 or 8 characters long
-        hex_value = padding_hex.format_hex(hex_value, 6)  # Calls format_hex to adjust length
+        hex_value = format_hex(hex_value, 6)  # Calls format_hex to adjust length
         
         if not hex_value:  # If format_hex returned None, the input was invalid
             return None
