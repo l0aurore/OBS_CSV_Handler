@@ -4,10 +4,12 @@ import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
 import csv
 import os
+import platform
 from background_scripts.config import DEFAULT_CSV_PATH, OBS_HOST, OBS_PORT, BASE_DIR
 from background_scripts.csv_handler import CSVHandler
 from background_scripts.obs_controller import OBSController
 from background_scripts.logger import logger
+
 
 class ConfigureMappingDialog(tk.Toplevel):
     def __init__(self, parent, csv_handler):
@@ -201,7 +203,7 @@ class OBSUpdaterGUI:
         """Initialize the GUI."""
         self.root = root
         self.root.title("OBS CSV Updater")
-        self.root.geometry("600x400")
+        self.root.geometry("700x350")
 
         # Initialize current CSV path
         self.current_csv_path = DEFAULT_CSV_PATH
@@ -309,6 +311,21 @@ class OBSUpdaterGUI:
 
         # Bind double-click for editing
         self.tree.bind("<Double-1>", self.edit_item)
+        
+
+        #keybinds for refreshing and saving
+        os_name = platform.system()
+
+        if os_name == "Windows":
+            # Windows keybinds
+            self.tree.bind('<Control-s>', self.save_changes)
+            self.tree.bind('<F5>', self.load_sources)
+
+        elif os_name == "Darwin":  # Darwin is the OS name for macOS
+            # macOS keybinds
+            self.tree.bind("<Command-s>", self.save_changes)
+            self.tree.bind('<F5>', self.load_sources)
+               
 
     def create_buttons(self):
         """Create control buttons."""
@@ -319,14 +336,14 @@ class OBSUpdaterGUI:
                   command=self.create_new_source).pack(side=tk.LEFT, padx=5)
         ttk.Button(button_frame, text="Configure CSV Mapping",
                   command=self.open_mapping_dialog).pack(side=tk.LEFT, padx=5)
-        ttk.Button(button_frame, text="Refresh",
+        ttk.Button(button_frame, text="Reload CSV",
                   command=self.load_sources).pack(side=tk.LEFT, padx=5)
-        ttk.Button(button_frame, text="Save Changes",
+        ttk.Button(button_frame, text="Save & Send to OBS",
                   command=self.save_changes).pack(side=tk.LEFT, padx=5)
-        ttk.Button(button_frame, text="Connect to OBS",
+        ttk.Button(button_frame, text="Connect to Websocket",
                   command=self.connect_to_obs).pack(side=tk.LEFT, padx=5)
 
-    def load_sources(self):
+    def load_sources(self, event= None):
         """Load sources from CSV file."""
         # Clear existing items
         for item in self.tree.get_children():
@@ -402,7 +419,7 @@ class OBSUpdaterGUI:
                             writer = csv.writer(f)
                             writer.writerows(updated_data)  # Write all updated rows
 
-                        logger.info(f"CSV successfully updated: {self.current_csv_path}")
+                        logger.info(f"CSV & OBS successfully updated: {self.current_csv_path}")
 
                     except Exception as e:
                         logger.error(f"Error updating CSV: {str(e)}")
@@ -410,10 +427,10 @@ class OBSUpdaterGUI:
                     logger.warning(f"Source name '{old_source_name}' not found in column_mapping!")
 
             entry.bind('<Return>', save_edit)  # Save on Enter key
-            entry.bind('<FocusOut>', lambda e: entry.destroy())  # Destroy on focus out
+            entry.bind('<FocusOut>', save_edit)  # Save on focus out
+            entry.bind('<Escape>', lambda e: entry.destroy()) #Destory on Escape  
 
-
-    def save_changes(self):
+    def save_changes(self, event=None):
         """Save changes to CSV and update OBS."""
         try:
             # Get all items from treeview
@@ -424,8 +441,8 @@ class OBSUpdaterGUI:
 
             # Update OBS
             if self.obs_controller.bulk_update_sources(sources):
-                messagebox.showinfo("Success", "Changes saved and sources updated")
-                logger.info("Changes saved and sources updated successfully")
+                messagebox.showinfo("Success", "Changes to CSV & OBS saved and sources updated")
+                logger.info("Changes to CSV & OBS saved and sources updated successfully")
             else:
                 messagebox.showwarning("Warning", "Changes saved but failed to update some sources")
 
@@ -481,7 +498,6 @@ class OBSUpdaterGUI:
         except Exception as e:
             logger.error(f"Error in mapping dialog: {str(e)}")
             messagebox.showerror("Error", f"Failed to open mapping dialog: {str(e)}")
-
 
 def main():
     root = tk.Tk()

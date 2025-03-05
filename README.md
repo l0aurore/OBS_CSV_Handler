@@ -14,11 +14,12 @@ OBS CSV Handler is intended
 
 OBS CSV Handler can use any CSV file to create inputs but requires name markers to generate specific inputs for OBS. 
 
-    picture         creates an image vs 3 input from file pathway
-    color           creates a color source at 100% opacity (put in hex, script will account # in sheets) 
+    picture         creates an "image vs 3 input" from file pathway
+    color           creates a "color source" at 100% opacity (put in hex, script will account # in sheets) 
                         Hexes are converted in reverse order for BGRA, and the result is ARGB to send to OBS. 
-    browser         creates a browser source from the URL
-    media           creates a media file from file pathway
+    browser         creates a "browser source" from the URL
+    media           creates a "media source" from file pathway
+    text            creates a "text source"
 
     All other labels will create a text field by default. 
 
@@ -29,21 +30,23 @@ Scenes and inputs:
 
 How to use: (Gui.py is main file, open in compiler or CMD Prompt/Terminal)
 - Browse: locate the CSV file that you want as your source.
-- Add new Source: Manually add a new source quickly. This will not update your CSV file. 
+- Add new Source: Manually add a new source to OBS quickly. This will not update your CSV file. 
 - Configure CSV Mapping: Adjust CSV input naming protocols. Rerun this when adding additional values from CSV
-- Refresh: Update changes of existing fields of CSV inside of OBS CVS Updater (not OBS yet)
-- Save Changes: Creates/updates sources inside of OBS
-- Connect to OBS: If OBS CSV disconnects from OBS websocket, click connect to OBS to attempt a reconnection. The program will attempt 3 times.
-- Double-clicking values will allow you to edit source name and values. Hexes can be input however you need to, and when you refresh/save changes, the GUI will convert the hex. This updates the CSV.  
+- Reload CSV: Update changes of existing fields of CSV inside of program. Keybind- F5
+- Save & Send to OBS: Updates CSV and Creates/updates sources inside of OBS. Keybind - Control/Command + s
+- Connect to Websocket: If OBS CSV disconnects from OBS websocket, click connect to OBS to attempt a reconnection. The program will attempt 3 times.
+- Double-clicking values will allow you to edit source name and values. Press Enter or Click to Save Changes. Press Escape to cancel changes. Values can be input however you need to, and when you reload/save changes, the GUI will convert the hex properly. This also will updates the CSV automatically.  
 
 Known/untested bugs:
 1) What happens to GUI above x number of inputs.  
 2) Browser sources default as transparent
+3) Keybinds for reload and save only work after clicking within the source/value box. 
+4) Add New Source does not save to CSV
 
 Planned implementations:
 1) GUI displays short hex and not decimal hex
 2) GUI displays short pathways
-3) Move "Save Changes" to below "Refresh" and add shortcuts for refresh and save. 
+3) Move "Save Changes" to below "Reload"
 4) Add Scene and Keybind creation
 5) Implement embedded API collection
 6) Global modifiers (transparency, rotation, etc) to source to affect across all scenes
