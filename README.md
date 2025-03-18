@@ -42,6 +42,7 @@ Known/untested bugs:
 2) Browser sources default as transparent
 3) Keybinds for reload and save only work after clicking within the source/value box. 
 4) Add New Source does not save to CSV
+5) CSV files need to be transposed before they are valid. (due to five sheets csv output)
 
 Planned implementations:
 1) GUI displays short hex and not decimal hex
