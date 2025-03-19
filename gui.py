@@ -204,6 +204,7 @@ class OBSUpdaterGUI:
         self.root = root
         self.root.title("OBS CSV Updater")
         self.root.geometry("700x350")
+        self.keybindings()
 
         # Initialize current CSV path
         self.current_csv_path = DEFAULT_CSV_PATH
@@ -311,22 +312,7 @@ class OBSUpdaterGUI:
 
         # Bind double-click for editing
         self.tree.bind("<Double-1>", self.edit_item)
-        
-
-        #keybinds for refreshing and saving
-        os_name = platform.system()
-
-        if os_name == "Windows":
-            # Windows keybinds
-            self.tree.bind('<Control-s>', self.save_changes)
-            self.tree.bind('<F5>', self.load_sources)
-
-        elif os_name == "Darwin":  # Darwin is the OS name for macOS
-            # macOS keybinds
-            self.tree.bind("<Command-s>", self.save_changes)
-            self.tree.bind('<F5>', self.load_sources)
-               
-
+          
     def create_buttons(self):
         """Create control buttons."""
         button_frame = ttk.Frame(self.main_frame)
@@ -498,6 +484,28 @@ class OBSUpdaterGUI:
         except Exception as e:
             logger.error(f"Error in mapping dialog: {str(e)}")
             messagebox.showerror("Error", f"Failed to open mapping dialog: {str(e)}")
+    
+    #Global Keybinds
+    def keybindings(self):
+
+        #Checking Platform (Win or MAC)
+        os_name = platform.system()
+
+        #Windows keybinds
+        if os_name == "Windows":
+            self.root.bind_all('<F5>', self.load_sources)
+            self.root.bind_all('<Control-s>', self.save_changes)
+            self.root.bind_all('<Control-q>', self.quit_application)
+
+        #Mac Keybinds
+        elif os_name == "Darwin":
+            self.root.bind_all('<F5>', self.load_sources)
+            self.root.bind_all('<Command-s>', self.save_changes)
+            self.root.bind_all('<Command-q>', self.quit_application)
+    
+    def quit_application(self, event=None):
+        logger.info("Quitting application via keybind")
+        self.root.quit()
 
 def main():
     root = tk.Tk()

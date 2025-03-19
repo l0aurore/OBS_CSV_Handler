@@ -21,24 +21,3 @@ def format_hex(hex_value, total_length=6):
         hex_value = f"0x{hex_str}"
 
     return hex_value  # Now hex_value is updated
-"""
-hex_value = "33550"
-hex_value = format_hex(hex_value, 6)  # Overwrite hex_value with the formatted version
-print(hex_value)  # Output: 0x0000ABCD
-
-def process_hex(hex_value):
-    try:
-        # Extract color components in reverse order for BGRA
-        r = int(hex_value[0:2], 16)  # Read red
-        g = int(hex_value[2:4], 16)  # Green
-        b = int(hex_value[4:6], 16)  # Blue
-        a = int(hex_value[6:8], 16)  # Alpha
-
-        # Pack as BGRA for OBS (correct byte order)
-        result = (a << 24) | (b << 16) | (g << 8) | r
-
-        return result
-
-    except ValueError:
-        return None  # Invalid hex digits
-"""

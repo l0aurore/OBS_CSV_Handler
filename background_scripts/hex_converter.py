@@ -1,20 +1,7 @@
 from background_scripts.padding_hex import format_hex # Ensure padding_hex.py contains format_hex
 
 def validate_hex_color(hex_value):
-    """
-    Convert a hex color string to OBS-compatible BGRA decimal integer.
-    Handles both 6-digit RGB (#RRGGBB) and 8-digit RGBA (#RRGGBBAA) hex codes.
-    Also preserves existing decimal RGBA values.
-
-    Args:
-        hex_value (str): Hex color string with or without leading '#',
-                        in either RRGGBB or RRGGBBAA format,
-                        or a decimal RGBA integer as a string.
-
-    Returns:
-        int: BGRA decimal integer suitable for OBS color sources,
-             or None if the input is invalid.
-    """
+   
     try:
         # Remove quotes, whitespace, and handle empty input
         hex_value = str(hex_value).strip().strip('"\'')

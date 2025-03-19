@@ -35,14 +35,14 @@ How to use: (Gui.py is main file, open in compiler or CMD Prompt/Terminal)
 - Reload CSV: Update changes of existing fields of CSV inside of program. Keybind- F5
 - Save & Send to OBS: Updates CSV and Creates/updates sources inside of OBS. Keybind - Control/Command + s
 - Connect to Websocket: If OBS CSV disconnects from OBS websocket, click connect to OBS to attempt a reconnection. The program will attempt 3 times.
-- Double-clicking values will allow you to edit source name and values. Press Enter or Click to Save Changes. Press Escape to cancel changes. Values can be input however you need to, and when you reload/save changes, the GUI will convert the hex properly. This also will updates the CSV automatically.  
+- Double-clicking values will allow you to edit source name and values. Press Enter or Click to Save Changes. Press Escape to cancel changes. Values can be input however you need to, and when you reload/save changes, the GUI will convert the hex properly. This also will updates the CSV automatically.  (If using API, this will be overridden once API updates CSV)
+- Closing program: press the exit. Keybind - Control + q
 
 Known/untested bugs:
-1) What happens to GUI above x number of inputs.  
-2) Browser sources default as transparent
-3) Keybinds for reload and save only work after clicking within the source/value box. 
-4) Add New Source does not save to CSV
-5) CSV files need to be transposed before they are valid. (due to five sheets csv output)
+1) Browser sources default as transparent
+2) Keybinds for reload and save only work after clicking within the source/value box. 
+3) Add New Source does not update GUI or CSV but does update OBS
+4) CSV files need to be transposed before they are valid. (due to five sheets csv output)
 
 Planned implementations:
 1) GUI displays short hex and not decimal hex
